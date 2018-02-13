@@ -1,7 +1,5 @@
 class SessionsController < ApplicationController 
 
-  #add signup route, that redirects to login route
-
   get '/signup' do
     erb :'users/signup'
   end
@@ -22,7 +20,7 @@ class SessionsController < ApplicationController
 
   post '/login' do
     user = User.find_by(username: params[:username])
-    if user && user.authenticate(params[:password])
+    if user && user.authenticate(params[:password]) #user is evaluating truthiness of line above
       session[:user_id] = user.id
       redirect '/bookshelf'
     else
@@ -45,5 +43,8 @@ class SessionsController < ApplicationController
     puts params
   end
 
+  #for book edit logic, (outside of borrow) if book.user_id == current_user.id
+    #redirect to :bookname/edit
+  #else redirect to /bookshelf
 
 end
