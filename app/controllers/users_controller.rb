@@ -45,18 +45,4 @@ class UsersController < ApplicationController
     end
   end
 
-  #put logic below in it's own controller? (add that controller to config.ru)
-
-  post '/bookshelf' do
-    # add if !logged_in? logic 
-      # redict to '/login'
-    session[:username] = params[:username]
-    session[:email] = params[:email]
-    puts params
-  end
-
-  #for book edit logic, (outside of borrow) if book.user_id == current_user.id
-    #redirect to :bookname/edit
-  #else redirect to /bookshelf
-
 end
