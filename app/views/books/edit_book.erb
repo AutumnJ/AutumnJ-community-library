@@ -11,11 +11,14 @@
   <label>Language:</label>
   <input type="text" name="book[language]" id="book_language" value="<%=@book.language%>">
 
-  <label>Status:</label>
-    <select name="book[status]" required>
-    <option value="private">Private: Not for Lending</option>
-    <option value="available">Available for Borrowing</option>
-  </select>
+  <% if @book.status != "borrowed" %> <!-- should not edit status of book someone else has borrowed -->
+    <label>Status:</label>
+      <select name="book[status]" required>
+      <option value="private">Private: Not for Lending</option>
+      <option value="available">Available for Borrowing</option>
+      </select>
+  <% end %>
+
   <br></br>
   <label>Genre:</label>
   <%Genre.all.each do |genre|%>
