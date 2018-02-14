@@ -1,0 +1,47 @@
+<h1>Edit book details below:</h1>
+
+<form action="/bookshelf/<%=@book.slug%>" method="POST">
+  <input id="hidden" type="hidden" name="_method" value="PATCH">
+  <label>Title:</label>
+  <input type="text" name="book[title]" id="book_title" value="<%=@book.title%>">
+
+  <label>Year Published:</label>
+  <input type="integer" name="book[year_published]" id="book_year_published" value="<%=@book.year_published%>">
+
+  <label>Language:</label>
+  <input type="text" name="book[language]" id="book_language" value="<%=@book.language%>">
+
+  <label>Status:</label>
+    <select name="book[status]" required>
+    <option value="private">Private: Not for Lending</option>
+    <option value="available">Available for Borrowing</option>
+  </select>
+  <br></br>
+  <label>Genre:</label>
+  <%Genre.all.each do |genre|%>
+  <ul><input type="checkbox" name="book[genre_ids][]" value="<%=genre.id%>" id="<%=genre.name%>" <%='checked' if @book.genres.include?(genre) %>><%= genre.name %></input></ul>
+  <%end%>
+
+  <label>and/or, create a new genre:</label>
+  <br></br>
+    <label>Genre:</label>
+      <input  type="text" name="genre[name]" id="genre_name"></input>
+  <br></br>
+
+  <label>Author:</label>
+
+  <%Author.all.each do |author|%>
+  <ul><input type="checkbox" name="book[author_ids][]" value="<%=author.id%>" id="<%=author.name%>" <%='checked' if @book.authors.include?(author) %>><%= author.name %></input></ul>
+  <%end%>
+
+  <label>and/or, create a new author:</label>
+  <br></br>
+    <label>Author:</label>
+      <input  type="text" name="author[name]" id="author_name"></input>
+  <br></br>
+
+  <input type="submit" value="Update Book">
+
+</form>
+<br></br>
+<a href="/bookshelf">Return to your bookshelf, without editing this book.</a>
