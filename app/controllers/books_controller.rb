@@ -48,9 +48,8 @@ class BooksController < ApplicationController
         @book.user = current_user
         @book.save
 
-      #redirect to '/bookshelf/#{@book.slug}' #not sure why this isn't working
-      redirect to '/bookshelf'
-    else #flash message 
+        redirect to "/bookshelf/#{@book.slug}"
+    else #flash message (please make sure the book you're adding isn't already in your collection)
       redirect to '/bookshelf/new'
     end
   end
@@ -107,26 +106,49 @@ class BooksController < ApplicationController
     end    
   end
 
-  get '/bookshelf/:slug/edit' do
+  get '/bookshelf/:slug/edit' do #add link to edit on show page
     if logged_in?
       @book = Book.find_by_slug(params[:slug])
-    #create form for user to edit book info 
-    #allow user to make book available for borrowing
-    #add link to edit on show page
-    erb :'/books/edit_book'
+        if @book.user == current_user
+          erb :'/books/edit_book'
+        else
+          redirect '/bookshelf'
+        end
     else
       redirect '/login'
+    end
   end
 
-  post '/bookshelf/:slug' do
-    #make book updates 
+  patch '/bookshelf/:slug' do
+    if logged_in?
+      @book = Book.find_by_slug(params[:slug])
+      @book.update(params[:book])
+        if !params[:genre][:name].empty?
+          genre = Genre.create(name: params[:genre][:name])
+          @book.genres << genre
+        end
+        if !params[:author][:name].empty?
+          author = Author.create(name: params[:author][:name])
+          @book.authors << author
+        end
+        @book.save
+
+        redirect to "/bookshelf/#{@book.slug}"
+    else
+      redirect '/login'
+    end
   end
 
-  get '/bookshelf/:slug/delete' do
-
+  delete '/bookshelf/:slug/delete' do
+    if logged_in?
+      @book = Book.find_by_slug(params[:slug])
+        if @book.user == current_user
+          @book.delete
+          redirect '/bookshelf'
+        end  
+    else
+      redirect '/login'
+    end
   end
-  #for book edit logic, (outside of borrow) if book.user_id == current_user.id
-    #redirect to :bookname/edit
-  #else redirect to /bookshelf
 
 end
