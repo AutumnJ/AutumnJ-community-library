@@ -3,18 +3,20 @@ class BooksController < ApplicationController
     #put logic below in it's own controller? (add that controller to config.ru)
 
   get '/bookshelf' do
-    # add if !logged_in? logic 
-      # redict to '/login'
-    # session[:username] = params[:username]
-    # session[:email] = params[:email]
-    # puts params
-    erb :'/books/bookshelf'
+    if logged_in?
+      @user = current_user
+      @books = Book.all
+      erb :'/books/bookshelf'
+    else
+      redirect '/login'
+    end
   end
 
   get '/bookshelf/:id' do
     #find book by id
     #in view, display specific book details -- create books/show_book
     #link to edit and delete
+    erb :'/books/show_book'
   end
 
   get '/bookshelf/:id/borrow' do
