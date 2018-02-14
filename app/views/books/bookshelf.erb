@@ -4,19 +4,7 @@
 <!-- just needs to link to book, move this logic into individual view -->
 <% @user.books.all.each do |book| %>
   <ul>
-    <p>Title: <%= book.title %></p>
-    <p>Year Published: <%= book.year_published %></p>
-    <p>Language: <%= book.language %></p>
-    <% if book.status == 'borrowed' %>
-      <% borrower = User.find(book.borrower) %>
-      <p>Status: Borrowed by <%= borrower.name %></p>
-    <% end %>
-    <% book.authors.all.each do |author| %>
-      <p><%= author.name %>
-    <% end %>
-    <% book.genres.all.each do |genre| %>
-      <p><%= genre.name %>
-    <% end %>
+    <a href="/bookshelf/<%=book.slug%>"><%= book.title %></a>
   </ul>
 <% end %>
 
