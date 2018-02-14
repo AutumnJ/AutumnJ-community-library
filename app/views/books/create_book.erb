@@ -1,0 +1,46 @@
+<h1>Enter book info below!</h1>
+<form method="POST" action="/bookshelf">
+
+  <strong>Title:</strong>
+  <input type="text" name="book[title]" required>
+  <br></br>
+  <strong>Year Published:</strong>
+  <input  type="integer" name="book[year_published]">
+  <br></br>
+  <strong>Language:</strong>
+  <input  type="string" name="book[language]">
+  <br></br>
+  <strong>Status:</strong>
+  <select name="book[status]" required>
+    <option value="private">Private: Not for Lending</option>
+    <option value="available">Available for Borrowing</option>
+  </select>
+  <br></br>
+
+  <strong>Choose a genre:</strong>
+
+  <%Genre.all.each do |genre|%>
+  <ul><input type="checkbox" name="genres[]" value="<%=genre.id%>" id="<%=genre.name%>"><%= genre.name %></input></ul>
+  <%end%>
+
+  <label>and/or, create a new genre:</label>
+  <br></br>
+    <label>Genre:</label>
+      <input  type="text" name="genre[name]" id="genre_name"></input>
+  <br></br>
+
+  <strong>Choose an author:</strong>
+
+  <%Author.all.each do |author|%>
+  <ul><input type="checkbox" name="authors[]" value="<%=author.id%>" id="<%=author.name%>"><%= author.name %></input></ul>
+  <%end%>
+
+  <label>and/or, create a new author:</label>
+  <br></br>
+    <label>Author:</label>
+      <input  type="text" name="author[name]" id="author_name"></input>
+  <br></br>
+
+  <input type="submit" value="Create">
+  
+</form>

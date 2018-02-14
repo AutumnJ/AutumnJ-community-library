@@ -11,27 +11,44 @@ class BooksController < ApplicationController
   end
 
   get '/bookshelf/new' do
-    #send post request to below
+    if logged_in?
     erb :'/books/create_book'
+    else
+      redirect '/login'
+    end       
   end
 
-  post '/bookshelf' do
-    #create book, create author, create genre as needed 
-    #redirect to bookshelf
+  post '/bookshelf' do #need some management for duplicate entries
+    @book = Book.create(params[:book])
+      if !params[:genre][:name].empty?
+        @book.genres << Genre.create(name: params[:genre][:name])
+      end
+      if !params[:author][:name].empty?
+        @book.authors << Author.create(name: params[:author][:name])
+      end
+      @book.genre_ids = params[:genres]
+      @book.author_ids = params[:authors]
+      @book.user = current_user
+      @book.save
+
+    #redirect to '/bookshelf/#{@book.slug}'
+    redirect to '/bookshelf'
   end
 
   get '/bookshelf/:slug' do
     if logged_in?
       @book = Book.find_by_slug(params[:slug])     
-      # if @book.user == current_user
+      if logged_in? && @book.user == current_user
         erb :'/books/show_book'
-      # else
-      #   redirect '/bookshelf'
-      # end
+      else
+        redirect '/bookshelf'
+      end
     else
       redirect '/login'
     end 
   end
+
+
 
   get '/bookshelf/:id/borrow' do
     #find book by id
