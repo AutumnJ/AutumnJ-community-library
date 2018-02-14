@@ -24,7 +24,7 @@ class BooksController < ApplicationController
       if @book.user == current_user
         erb :'/books/show_book'
       else
-        redirect '/bookshelf'
+        redirect '/bookshelf' #flash message - looks like that's not one of your books
       end
     else
       redirect '/login'
