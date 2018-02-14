@@ -1,7 +1,6 @@
 <h1>Community Library</h1>
 
 <h2>These are your books:</h2>
-<!-- just needs to link to book, move this logic into individual view -->
 <% @user.books.all.each do |book| %>
   <ul>
     <a href="/bookshelf/<%=book.slug%>"><%= book.title %></a>
@@ -17,12 +16,14 @@
 <% else %>
   <% @books.each do |book| %>
     <% if book.status == "available" && book.user_id != @user.id %>
-      <p>Title: <%= book.title %></p>
+      <ul>
+      <a href="/bookshelf/<%=book.slug%>/borrow"><%= book.title %></a>
+      </ul>
     <% end %>
   <% end %>
 <% end %>
 
-<!-- All book links in this section interpolate book.id/borrow for url -->
+<!-- All book links in this section interpolate book.slug/borrow for url -->
 
 <h2>Books you are currently borrowing:</h2>
 
@@ -31,12 +32,14 @@
 <% else %>
   <% @books.each do |book| %>
     <% if book.status == "borrowed" && book.borrower == @user.id %>
-      <p>Title: <%= book.title %></p>
+      <ul>
+      <a href="/bookshelf/<%=book.slug%>/return"><%= book.title %></a>
+      </ul>
     <% end %>
   <% end %>
 <% end %>
 
-<!-- All book links in this section interpolate book.id/return for url -->
+<!-- All book links in this section interpolate book.slug/return for url -->
 
 <p> If you're done, don't forget to <a href="/logout">logout</a>, but return soon.
 
