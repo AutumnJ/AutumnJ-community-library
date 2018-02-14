@@ -1,12 +1,55 @@
 <h1>Community Library</h1>
 
 <h2>These are your books:</h2>
-<!-- @user.books.each do -->
+<!-- just needs to link to book, move this logic into individual view -->
+<% @user.books.all.each do |book| %>
+  <ul>
+    <p>Title: <%= book.title %></p>
+    <p>Year Published: <%= book.year_published %></p>
+    <p>Language: <%= book.language %></p>
+    <% if book.status == 'borrowed' %>
+      <% borrower = User.find(book.borrower) %>
+      <p>Status: Borrowed by <%= borrower.name %></p>
+    <% end %>
+    <% book.authors.all.each do |author| %>
+      <p><%= author.name %>
+    <% end %>
+    <% book.genres.all.each do |genre| %>
+      <p><%= genre.name %>
+    <% end %>
+  </ul>
+<% end %>
 
-<h2>These are books available for borrowing!</h2>
-<!-- Books.all.select do |book| book.status == available && owner_id != @user id -->
+<!-- Add link to create a book -->
 
-<h3>These are books you're currently borrowing!</h3>
-<!-- Books.all.select do |book| book.status == borrowed && book.borrower_id == @user.id -->
+<h2>Books available for borrowing:</h2>
+
+<% if @books.select { |book| book.status == "available" && book.user_id != @user.id } == [] %>
+  <strong>No books available for borrowing? Update books in your library so they're available for borrowing and watch the list grow! </strong>
+<% else %>
+  <% @books.each do |book| %>
+    <% if book.status == "available" && book.user_id != @user.id %>
+      <p>Title: <%= book.title %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<!-- All book links in this section interpolate book.id/borrow for url -->
+
+<h2>Books you are currently borrowing:</h2>
+
+<% if @books.select { |book| book.status == "borrowed" && book.borrower == @user.id } == [] %>
+  <strong>Not borrowing any books? Get on it!</strong>
+<% else %>
+  <% @books.each do |book| %>
+    <% if book.status == "borrowed" && book.borrower == @user.id %>
+      <p>Title: <%= book.title %></p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<!-- All book links in this section interpolate book.id/return for url -->
+
+<p> If you're done, don't forget to <a href="/logout">logout</a>, but return soon.
 
 

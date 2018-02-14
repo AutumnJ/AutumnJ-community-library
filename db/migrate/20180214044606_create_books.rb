@@ -6,6 +6,7 @@ class CreateBooks < ActiveRecord::Migration[5.1]
       t.string :language
       t.string :status
       t.integer :borrower #will store foreign_key id of user that is borrower
+      t.integer :user_id #this is book owner
     end
   end
 end
