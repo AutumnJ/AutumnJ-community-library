@@ -7,11 +7,11 @@
       <% borrower = User.find(@book.borrower) %>
       <p>Status: Borrowed by <%= borrower.name %></p>
     <% end %>
-    <% @book.authors.all.each do |author| %>
-      <p>Author: <%= author.name %>
-    <% end %>
-    <% @book.genres.all.each do |genre| %>
-      <p>Genre: <%= genre.name %>
-    <% end %>
+    <p> Author: <% @book.authors.all.each do |author| %>
+        <ul><%= author.name %></ul>
+    <% end %></p>
+    <p>Genre: <% @book.genres.all.each do |genre| %>
+       <ul><%= genre.name %></ul>
+    <% end %></p>
 
     <!--         #link to edit and delete -->
