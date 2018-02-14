@@ -1,0 +1,17 @@
+<h1>Below is the info about the book you selected:</h1>
+
+    <p>Title: <%= @book.title %></p>
+    <p>Year Published: <%= @book.year_published %></p>
+    <p>Language: <%= @book.language %></p>
+    <% if @book.status == 'borrowed' %>
+      <% borrower = User.find(@book.borrower) %>
+      <p>Status: Borrowed by <%= borrower.name %></p>
+    <% end %>
+    <% @book.authors.all.each do |author| %>
+      <p>Author: <%= author.name %>
+    <% end %>
+    <% @book.genres.all.each do |genre| %>
+      <p>Genre: <%= genre.name %>
+    <% end %>
+
+    <!--         #link to edit and delete -->
