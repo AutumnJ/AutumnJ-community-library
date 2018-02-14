@@ -1,0 +1,17 @@
+<h1>Below is the info about the book you'd like to borrow:</h1>
+
+    <p>Title: <%= @book.title %></p>
+    <p>Year Published: <%= @book.year_published %></p>
+    <p>Language: <%= @book.language %></p>
+    <p> Author: <% @book.authors.all.each do |author| %>
+        <ul><%= author.name %></ul>
+    <% end %></p>
+    <p>Genre: <% @book.genres.all.each do |genre| %>
+       <ul><%= genre.name %></ul>
+    <% end %></p>
+
+<form method="POST" action="/bookshelf/<%=@book.slug%>/borrow">
+  <input type="submit" name="status" value="Borrow Book">
+</form>
+<br></br>
+<a href="/bookshelf">Return to your bookshelf, without borrowing this book.</a>
