@@ -8,7 +8,7 @@ class BooksController < ApplicationController
   get '/bookshelf' do
     if logged_in?
       @user = current_user
-      @books = Book.all
+      @books = Book.order(:title).all
       erb :'/books/bookshelf'
     else
       redirect '/login'
@@ -28,7 +28,7 @@ class BooksController < ApplicationController
       if @book = current_user.books.all.find_by_slug(params[:slug])     
         erb :'/books/show_book'
       else
-        redirect '/bookshelf' #flash message - looks like that's not one of your books
+        redirect '/bookshelf'
       end
     else
       redirect '/login'
@@ -38,22 +38,22 @@ class BooksController < ApplicationController
   post '/bookshelf' do
     if !current_user.books.all.find_by(title: params[:book][:title])
       @book = Book.create(params[:book])
-        if !params[:genre][:name].empty? && !Genre.find_by(name: params[:genre][:name]) #needs work to prevent duplicate genres
-          genre = Genre.create(name: params[:genre][:name])
+        if !params[:genre][:name].empty?
+          genre = Genre.find_or_create_by(name: params[:genre][:name])
           if params[:genres].nil?
             params[:genres] = []
           end
           params[:genres] << genre.id
         end
-        if !params[:author][:name].empty? && Author.find_by(name: params[:author][:name]) #needs work to prevent duplicate authors
-          author = Author.create(name: params[:author][:name])
+        if !params[:author][:name].empty?
+          author = Author.find_or_create_by(name: params[:author][:name])
           if params[:authors].nil?
             params[:authors] = []
           end
             params[:authors] << author.id
         end
 
-        @book.genre_ids = params[:genres]
+        @book.genre_ids = params[:genres] #make sure each genre is only added once?
         @book.author_ids = params[:authors]
         @book.user = current_user
         @book.save
@@ -130,16 +130,16 @@ class BooksController < ApplicationController
     end
   end
 
-  patch '/bookshelf/:slug' do #add logic to prevent duplicate authors/genres?
+  patch '/bookshelf/:slug' do
     if logged_in?
       @book = current_user.books.all.find_by_slug(params[:slug])
       @book.update(params[:book])
         if !params[:genre][:name].empty?
-          genre = Genre.create(name: params[:genre][:name])
+          genre = Genre.find_or_create_by(name: params[:genre][:name])
           @book.genres << genre
         end
         if !params[:author][:name].empty?
-          author = Author.create(name: params[:author][:name])
+          author = Author.find_or_create_by(name: params[:author][:name])
           @book.authors << author
         end
         @book.save
