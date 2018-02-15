@@ -23,7 +23,7 @@
 
   <strong>Choose a genre:</strong>
 
-  <%Genre.all.each do |genre|%>
+  <%Genre.order(:name).all.each do |genre|%>
   <ul><input type="checkbox" name="genres[]" value="<%=genre.id%>" id="<%=genre.name%>"><%= genre.name %></input></ul>
   <%end%>
 
@@ -35,7 +35,7 @@
 
   <strong>Choose an author:</strong>
 
-  <%Author.all.each do |author|%>
+  <%Author.order(:name).all.each do |author|%>
   <ul><input type="checkbox" name="authors[]" value="<%=author.id%>" id="<%=author.name%>"><%= author.name %></input></ul>
   <%end%>
 
