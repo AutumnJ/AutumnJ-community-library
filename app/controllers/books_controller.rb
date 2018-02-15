@@ -20,8 +20,7 @@ class BooksController < ApplicationController
 
   get '/bookshelf/:slug' do
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])     
-      if @book.user == current_user
+      if @book = current_user.books.all.find_by_slug(params[:slug])     
         erb :'/books/show_book'
       else
         redirect '/bookshelf' #flash message - looks like that's not one of your books
@@ -32,7 +31,7 @@ class BooksController < ApplicationController
   end
 
   post '/bookshelf' do
-    if !Book.find_by(title: params[:book][:title])
+    if !current_user.books.all.find_by(title: params[:book][:title])
       @book = Book.create(params[:book])
         if !params[:genre][:name].empty?
           genre = Genre.create(name: params[:genre][:name])
