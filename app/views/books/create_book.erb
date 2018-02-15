@@ -2,6 +2,16 @@
 <%= flash[:message] %> 
 <% end %>
 
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    h1, form { padding-left: 1cm; }
+    a { padding-left: 1cm; padding-bottom: 1cm;}
+  </style>
+</head>
+<body>
+
 <h1>Enter book info below!</h1>
 <form method="POST" action="/bookshelf">
 
@@ -50,3 +60,6 @@
 </form>
 <br></br>
 <a href="/bookshelf">Return to your bookshelf without creating a book.</a>
+
+</body>
+</html>
