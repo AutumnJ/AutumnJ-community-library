@@ -1,14 +1,30 @@
 <h1>Below is the info about the book you'd like to borrow from: <%= @book.user.name %></h1>
 
     <p>Title: <%= @book.title %></p>
-    <p>Year Published: <%= @book.year_published %></p>
-    <p>Language: <%= @book.language %></p>
-    <p> Author: <% @book.authors.all.each do |author| %>
-        <ul><%= author.name %></ul>
-    <% end %></p>
-    <p>Genre: <% @book.genres.all.each do |genre| %>
-       <ul><%= genre.name %></ul>
-    <% end %></p>
+    <% if @book.year_published.nil? %>
+      <p>Year Published: N/A</p>
+    <% else %>
+      <p>Year Published: <%= @book.year_published %></p>
+    <% end %>
+    <% if @book.language.nil? || @book.language == "" %>
+      <p>Language: N/A</p>
+    <% else %>
+      <p>Language: <%= @book.language %></p>
+    <% end %>
+    <% if @book.authors.nil? || @book.authors == [] %>
+      <p>Author(s): N/A</p>
+    <% else %>
+        <p> Author(s): <% @book.authors.all.each do |author| %>
+            <ul><%= author.name %></ul>
+        <% end %></p>
+    <% end %>
+    <% if @book.genres.nil? || @book.genres == [] %>
+      <p>Genres(s): N/A</p>
+    <% else %>
+      <p>Genre(s): <% @book.genres.uniq.all.each do |genre| %>
+         <ul><%= genre.name %></ul>
+      <% end %></p>
+    <% end %>
 
 <form method="POST" action="/bookshelf/<%=@book.slug%>/borrow">
   <input type="submit" name="status" value="Borrow Book">
