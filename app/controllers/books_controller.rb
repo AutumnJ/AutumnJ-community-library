@@ -33,14 +33,14 @@ class BooksController < ApplicationController
   post '/bookshelf' do
     if !current_user.books.all.find_by(title: params[:book][:title])
       @book = Book.create(params[:book])
-        if !params[:genre][:name].empty?
+        if !params[:genre][:name].empty? && !Genre.find_by(name: params[:genre][:name]) #needs work to prevent duplicate genres
           genre = Genre.create(name: params[:genre][:name])
           if params[:genres].nil?
             params[:genres] = []
           end
           params[:genres] << genre.id
         end
-        if !params[:author][:name].empty?
+        if !params[:author][:name].empty? && Author.find_by(name: params[:author][:name]) #needs work to prevent duplicate authors
           author = Author.create(name: params[:author][:name])
           if params[:authors].nil?
             params[:authors] = []
@@ -111,22 +111,21 @@ class BooksController < ApplicationController
     end    
   end
 
-  get '/bookshelf/:slug/edit' do #add link to edit on show page
+  get '/bookshelf/:slug/edit' do
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])
-        if @book.user == current_user
+      if @book = current_user.books.all.find_by_slug(params[:slug])
           erb :'/books/edit_book'
-        else
-          redirect '/bookshelf'
-        end
+      else
+        redirect '/bookshelf'
+      end
     else
       redirect '/login'
     end
   end
 
-  patch '/bookshelf/:slug' do
+  patch '/bookshelf/:slug' do #add logic to prevent duplicate authors/genres?
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])
+      @book = current_user.books.all.find_by_slug(params[:slug])
       @book.update(params[:book])
         if !params[:genre][:name].empty?
           genre = Genre.create(name: params[:genre][:name])
@@ -146,11 +145,10 @@ class BooksController < ApplicationController
 
   delete '/bookshelf/:slug/delete' do
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])
-        if @book.user == current_user
-          @book.delete
-          redirect '/bookshelf'
-        end  
+      if @book = current_user.books.all.find_by_slug(params[:slug])
+        @book.delete
+        redirect '/bookshelf' #flash message (this book has been deleted)
+      end  
     else
       redirect '/login'
     end
