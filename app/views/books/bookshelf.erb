@@ -5,7 +5,7 @@
 <h1>Community Library</h1>
 
 <h2>These are your books:</h2>
-<% @user.books.all.each do |book| %>
+<% @user.books.order(:title).all.each do |book| %>
   <ul>
     <a href="/bookshelf/<%=book.slug%>"><%= book.title %></a>
   </ul>
