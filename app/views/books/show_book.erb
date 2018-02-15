@@ -11,9 +11,14 @@
     <% else %>
       <p>Language: <%= @book.language %></p>
     <% end %>
-    <% if @book.status == 'borrowed' %>
+    <% if @book.status == "borrowed" %>
       <% borrower = User.find(@book.borrower) %>
       <p>Status: Borrowed by <%= borrower.name %></p>
+    <% elsif @book.status == "available" %>
+      <% status = "Available for the community to borrow" %>
+      <p>Status: <%= status %></p>
+    <% else %>
+      <p>Status: Private - not available for the community to borrow</p>
     <% end %>
     <% if @book.authors.nil? || @book.authors == [] %>
       <p>Author(s): N/A</p>
