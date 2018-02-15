@@ -36,11 +36,17 @@ class BooksController < ApplicationController
       @book = Book.create(params[:book])
         if !params[:genre][:name].empty?
           genre = Genre.create(name: params[:genre][:name])
+          if params[:genres].nil?
+            params[:genres] = []
+          end
           params[:genres] << genre.id
         end
         if !params[:author][:name].empty?
           author = Author.create(name: params[:author][:name])
-          params[:authors] << author.id
+          if params[:authors].nil?
+            params[:authors] = []
+          end
+            params[:authors] << author.id
         end
 
         @book.genre_ids = params[:genres]
