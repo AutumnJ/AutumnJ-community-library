@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    h1, form { padding-left: 1cm; }
+    a { padding-left: 1cm; padding-bottom: 1cm;}
+  </style>
+</head>
+<body>
+
 <h1>Edit book details below:</h1>
 
 <form action="/bookshelf/<%=@book.slug%>" method="POST">
@@ -48,3 +58,6 @@
 </form>
 <br></br>
 <a href="/bookshelf">Return to your bookshelf, without editing this book.</a>
+
+</body>
+</html>

@@ -2,6 +2,17 @@
 <%= flash[:message] %> 
 <% end %>
 
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    h1, p, form { padding-left: 1cm; }
+    ul  { padding-left: 2cm; }
+    a { padding-left: 1cm; padding-bottom: 1cm;}
+  </style>
+</head>
+<body>
+
 <h1>Below is the info about the book you selected:</h1>
 
     <p>Title: <%= @book.title %></p>
@@ -48,3 +59,5 @@
     <a href="/bookshelf/<%=@book.slug%>/edit">Edit this book's info.</a>
     <br></br>
     <a href="/bookshelf">Return to your bookshelf.</a>
+</body>
+</html>

@@ -2,6 +2,16 @@
 <%= flash[:message] %> 
 <% end %>
 
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    h1 {text-align:center;}
+    h2, div, h4 { padding-left: 1cm; }
+  </style>
+</head>
+<body>
+
 <h1>Community Library</h1>
 
 <h2>These are your books:</h2>
@@ -11,7 +21,9 @@
   </ul>
 <% end %>
 
-<a href="/bookshelf/new">Add a new book to your collection</a>
+<h4>Add more books as your collection grows!</h4>
+
+<div><a href="/bookshelf/new">Add a new book to your collection</a></div>
 
 <h2>Books available for borrowing:</h2>
 
@@ -43,8 +55,13 @@
   <% end %>
 <% end %>
 
-<!-- All book links in this section interpolate book.slug/return for url -->
+<!-- All book links in this section interpolate <book.slug/return for url -->
+<div>
+  <form action="/logout">
+    <input type="submit" value="Log Out">
+  </form>
+</div>
 
-<p> If you're done, don't forget to <a href="/logout">logout</a>, but return soon.
-
+</body>
+</html>
 

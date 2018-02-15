@@ -1,0 +1,7 @@
+.background {
+    height: 200px; 
+    width: 100%;
+    background: black url(http://www.electrictoolbox.com/images/rangitoto-3072x200.jpg) no-repeat;
+    background-size: 100% 100%;
+}
+
