@@ -1,4 +1,9 @@
+require 'sinatra/base'
+require 'sinatra/flash'
+
 class BooksController < ApplicationController 
+
+  register Sinatra::Flash
 
   get '/bookshelf' do
     if logged_in?
@@ -53,8 +58,10 @@ class BooksController < ApplicationController
         @book.user = current_user
         @book.save
 
+        flash[:message] = "Successfully created book."
         redirect to "/bookshelf/#{@book.slug}"
-    else #flash message (please make sure the book you're adding isn't already in your collection)
+    else 
+      flash[:message] = "A book with that title is already in your collection."
       redirect to '/bookshelf/new'
     end
   end
@@ -137,6 +144,7 @@ class BooksController < ApplicationController
         end
         @book.save
 
+        flash[:message] = "Successfully updated book."
         redirect to "/bookshelf/#{@book.slug}"
     else
       redirect '/login'
@@ -147,7 +155,9 @@ class BooksController < ApplicationController
     if logged_in?
       if @book = current_user.books.all.find_by_slug(params[:slug])
         @book.delete
-        redirect '/bookshelf' #flash message (this book has been deleted)
+
+        flash[:message] = "The book was removed from your library."
+        redirect '/bookshelf'
       end  
     else
       redirect '/login'
