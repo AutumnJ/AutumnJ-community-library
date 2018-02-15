@@ -14,14 +14,14 @@
     <% if @book.authors.nil? || @book.authors == [] %>
       <p>Author(s): N/A</p>
     <% else %>
-        <p> Author(s): <% @book.authors.all.each do |author| %>
+        <p> Author(s): <% @book.authors.order(:name).all.each do |author| %>
             <ul><%= author.name %></ul>
         <% end %></p>
     <% end %>
     <% if @book.genres.nil? || @book.genres == [] %>
       <p>Genres(s): N/A</p>
     <% else %>
-      <p>Genre(s): <% @book.genres.all.each do |genre| %>
+      <p>Genre(s): <% @book.genres.order(:name).all.each do |genre| %>
          <ul><%= genre.name %></ul>
       <% end %></p>
     <% end %>
