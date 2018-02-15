@@ -1,4 +1,4 @@
-<h1>Below is the info about the book you're returning:</h1>
+<h1>Below is the info about the book you're returning to: <%= @book.user.name %></h1>
 
     <p>Title: <%= @book.title %></p>
     <% if @book.year_published.nil? %>
