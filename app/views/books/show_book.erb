@@ -1,3 +1,7 @@
+<% if !!flash[:message] %> 
+<%= flash[:message] %> 
+<% end %>
+
 <h1>Below is the info about the book you selected:</h1>
 
     <p>Title: <%= @book.title %></p>
@@ -41,6 +45,6 @@
       <input type="submit" value="Delete Book">
     </form>
     <br></br>
-    <a href="/bookshelf">Return to your bookshelf.</a>
-    <br></br>
     <a href="/bookshelf/<%=@book.slug%>/edit">Edit this book's info.</a>
+    <br></br>
+    <a href="/bookshelf">Return to your bookshelf.</a>
