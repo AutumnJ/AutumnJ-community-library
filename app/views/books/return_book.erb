@@ -12,28 +12,33 @@
 
 <h1>Below is the info about the book you're returning to: <%= @book.user.name %></h1>
 
-    <p>Title: <%= @book.title %></p>
+    <p><strong>Title: </strong><%= @book.title %></p>
     <% if @book.year_published.nil? %>
-      <p>Year Published: N/A</p>
+      <p><strong>Year Published: </strong>N/A</p>
     <% else %>
-      <p>Year Published: <%= @book.year_published %></p>
+      <p><strong>Year Published: </strong><%= @book.year_published %></p>
     <% end %>
     <% if @book.language.nil? || @book.language == "" %>
-      <p>Language: N/A</p>
+      <p><strong>Language: </strong>N/A</p>
     <% else %>
-      <p>Language: <%= @book.language %></p>
+      <p><strong>Language: </strong><%= @book.language %></p>
+    <% end %>
+    <% if @book.description.nil? || @book.description == "" %>
+      <p><strong>Description: </strong>N/A</p>
+    <% else %>
+      <p><strong>Description: </strong><%= @book.description %></p>
     <% end %>
     <% if @book.authors.nil? || @book.authors == [] %>
-      <p>Author(s): N/A</p>
+      <p><strong>Author(s): </strong>N/A</p>
     <% else %>
-        <p> Author(s): <% @book.authors.order(:name).all.each do |author| %>
+        <p><strong>Author(s): </strong><% @book.authors.order(:name).all.each do |author| %>
             <ul><%= author.name %></ul>
         <% end %></p>
     <% end %>
     <% if @book.genres.nil? || @book.genres == [] %>
-      <p>Genres(s): N/A</p>
+      <p><strong>Genres(s): </strong>N/A</p>
     <% else %>
-      <p>Genre(s): <% @book.genres.order(:name).all.each do |genre| %>
+      <p><strong>Genre(s): </strong><% @book.genres.order(:name).all.each do |genre| %>
          <ul><%= genre.name %></ul>
       <% end %></p>
     <% end %>
