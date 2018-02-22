@@ -35,7 +35,7 @@ class BooksController < ApplicationController
     end 
   end
 
-  post '/bookshelf' do
+  post '/bookshelf' do #add valid? 
     if !current_user.books.all.find_by(title: params[:book][:title])
       @book = Book.create(params[:book])
         if !params[:genre][:name].empty?
@@ -130,7 +130,7 @@ class BooksController < ApplicationController
     end
   end
 
-  patch '/bookshelf/:slug' do
+  patch '/bookshelf/:slug' do # add valid?
     if logged_in?
       @book = current_user.books.all.find_by_slug(params[:slug])
       @book.update(params[:book])

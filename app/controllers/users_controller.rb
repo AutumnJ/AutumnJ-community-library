@@ -1,4 +1,4 @@
-class UsersController < ApplicationController 
+class UsersController < ApplicationController  
 
   get '/signup' do
     if !logged_in?
@@ -10,8 +10,13 @@ class UsersController < ApplicationController
 
   post "/signup" do
     @user = User.new(name: params[:name], email: params[:email], username: params[:username], password: params[:password])
-    @user.save
-    redirect '/login'
+    # if @user.valid?
+      @user.save
+      redirect '/login'
+    # else 
+    #   flash[:message] = "Please enter a valid email address, along with your name, username password."
+    #   redirect '/signup'
+    # end
   end
 
   get '/login' do
