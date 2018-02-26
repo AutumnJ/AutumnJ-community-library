@@ -2,7 +2,7 @@ class Book < ActiveRecord::Base
 
 
   #include ActiveModel::Validations
-  # validates :title, presence: true 
+  validates :title, presence: true 
   # not currently validating title here as it is a required field in form
 
   belongs_to :user

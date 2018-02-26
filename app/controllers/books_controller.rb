@@ -69,7 +69,7 @@ class BooksController < ApplicationController
   get '/bookshelf/:slug/borrow' do
     if logged_in?
       @book = Book.find_by_slug(params[:slug])
-      if @book.user != current_user && @book.status == "available"
+      if @book.user != current_user && @book.status == "available" #available?(@book) defined available?(book) where book.status == "available"
         erb :'/books/borrow_book'
       else
         redirect '/bookshelf'
@@ -163,5 +163,11 @@ class BooksController < ApplicationController
       redirect '/login'
     end
   end
+
+  private 
+
+  # def current_book #add some logic to this and update 
+  #   current_user.books.all.find_by_slug(params[:slug])
+  # end
 
 end
