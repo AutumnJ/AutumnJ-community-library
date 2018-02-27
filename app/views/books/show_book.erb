@@ -17,10 +17,10 @@
 
     <%= erb :'/books/_template_show_basic_info', locals: {book: @book} %>
 
-    <% if Book.borrowed?(@book) %>
+    <% if @book.borrowed? %>
       <% borrower = User.find(@book.borrower) %>
       <p><strong>Status: </strong>Borrowed by <%= borrower.name %></p>
-    <% elsif Book.available?(@book) %>
+    <% elsif @book.available? %>
       <% status = "Available for the community to borrow" %>
       <p><strong>Status: </strong><%= status %></p>
     <% else %>
