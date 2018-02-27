@@ -1,9 +1,9 @@
 class Book < ActiveRecord::Base
 
+  include ActiveModel::Validations
 
-  #include ActiveModel::Validations
   validates :title, presence: true 
-  # not currently validating title here as it is a required field in form
+  #title is also required field when entering book
 
   belongs_to :user
   has_many :book_authors
@@ -17,6 +17,14 @@ class Book < ActiveRecord::Base
 
   def self.find_by_slug(slug)
     Book.all.detect {|book| book.slug == slug }
+  end
+
+  def self.available?(book)
+    book.status == "available"
+  end 
+
+  def self.borrowed?(book)
+    book.status == "borrowed"
   end
 
 end
