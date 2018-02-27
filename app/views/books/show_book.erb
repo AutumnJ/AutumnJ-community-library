@@ -8,52 +8,27 @@
   <style>
     h1, p, form { padding-left: 1cm; }
     ul  { padding-left: 2cm; }
-    a { padding-left: 1cm; padding-bottom: 1cm;}
+    div { padding-left: 1cm; padding-bottom: 1cm;}
   </style>
 </head>
 <body>
 
 <h1>Below is the info about the book you selected:</h1>
 
-    <p><strong>Title: </strong><%= @book.title %></p>
-    <% if @book.year_published.nil? %>
-      <p><strong>Year Published: </strong>N/A</p>
-    <% else %>
-      <p><strong>Year Published: </strong><%= @book.year_published %></p>
-    <% end %>
-    <% if @book.language.nil? || @book.language == "" %>
-      <p><strong>Language: </strong>N/A</p>
-    <% else %>
-      <p><strong>Language: </strong><%= @book.language %></p>
-    <% end %>
-    <% if @book.description.nil? || @book.description == "" %>
-      <p><strong>Description:</strong> N/A</p>
-    <% else %>
-      <p><strong>Description: </strong><%= @book.description %></p>
-    <% end %>
-    <% if @book.status == "borrowed" %>
+    <%= erb :'/books/_template_show_basic_info', locals: {book: @book} %>
+
+    <% if Book.borrowed?(@book) %>
       <% borrower = User.find(@book.borrower) %>
       <p><strong>Status: </strong>Borrowed by <%= borrower.name %></p>
-    <% elsif @book.status == "available" %>
+    <% elsif Book.available?(@book) %>
       <% status = "Available for the community to borrow" %>
       <p><strong>Status: </strong><%= status %></p>
     <% else %>
       <p><strong>Status: </strong>Private - not available for the community to borrow</p>
     <% end %>
-    <% if @book.authors.nil? || @book.authors == [] %>
-      <p><strong>Author(s): </strong>N/A</p>
-    <% else %>
-      <p><strong>Author(s): </strong><% @book.authors.order(:name).all.each do |author| %>
-          <ul><%= author.name %></ul>
-      <% end %></p>
-    <% end %>
-    <% if @book.genres.nil? || @book.genres == [] %>
-      <p><strong>Genres(s): </strong>N/A</p>
-    <% else %>
-      <p><strong>Genre(s): </strong><% @book.genres.order(:name).all.each do |genre| %>
-         <ul><%= genre.name %></ul>
-      <% end %></p>
-    <% end %>
+
+
+     <%= erb :'/books/_template_show_author_genre', locals: {book: @book} %>
 
     <br></br>
     <form method="post" action="/bookshelf/<%=@book.slug%>/delete">
@@ -61,7 +36,8 @@
       <input type="submit" value="Delete Book">
     </form>
     <br></br>
-    <a href="/bookshelf/<%=@book.slug%>/edit">Edit this book's info.</a>
-    <a href="/bookshelf">Return to your bookshelf.</a>
+    <div>
+    <a href="/bookshelf/<%=@book.slug%>/edit">Edit</a>  |  <a href="/bookshelf">Back</a>
+    </div>
 </body>
 </html>
