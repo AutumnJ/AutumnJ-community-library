@@ -40,7 +40,7 @@ class BooksController < ApplicationController
     if !current_user.books.all.find_by(title: params[:book][:title])
       @book = Book.create(params[:book])
         if !params[:genre][:name].empty?
-          genre = Genre.find_or_create_by(name: params[:genre][:name].capitalize)
+          genre = Genre.find_or_create_by(name: params[:genre][:name].titleize)
           if params[:genres].nil?
             params[:genres] = []
           end
@@ -49,7 +49,7 @@ class BooksController < ApplicationController
           end
         end
         if !params[:author][:name].empty?
-          author = Author.find_or_create_by(name: params[:author][:name].capitalize)
+          author = Author.find_or_create_by(name: params[:author][:name].titleize)
           if params[:authors].nil?
             params[:authors] = []
           end
@@ -72,7 +72,7 @@ class BooksController < ApplicationController
 
   get '/bookshelf/:slug/borrow' do
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])
+      @book = found_book
       if @book.user != current_user && Book.available?(@book)
         erb :'/books/borrow_book'
       else
@@ -86,7 +86,7 @@ class BooksController < ApplicationController
 
   post '/bookshelf/:slug/borrow' do
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])
+      @book = found_book
       @book.status = "borrowed"
       @book.borrower = current_user.id
       @book.save
@@ -99,7 +99,7 @@ class BooksController < ApplicationController
 
   get '/bookshelf/:slug/return' do
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])
+      @book = found_book
       if @book.borrower == current_user.id && Book.borrowed?(@book)
         erb :'/books/return_book'
       else
@@ -113,7 +113,7 @@ class BooksController < ApplicationController
 
   post '/bookshelf/:slug/return' do
     if logged_in?
-      @book = Book.find_by_slug(params[:slug])
+      @book = found_book
       @book.status = "available"
       @book.borrower = nil
       @book.save
@@ -142,13 +142,13 @@ class BooksController < ApplicationController
       @book = current_book
       @book.update(params[:book])
         if !params[:genre][:name].empty?
-          genre = Genre.find_or_create_by(name: params[:genre][:name].capitalize)
+          genre = Genre.find_or_create_by(name: params[:genre][:name].titleize)
           if !@book.genres.include?(genre) 
             @book.genres << genre
           end
         end
         if !params[:author][:name].empty?
-          author = Author.find_or_create_by(name: params[:author][:name].capitalize)
+          author = Author.find_or_create_by(name: params[:author][:name].titleize)
           if !@book.authors.include?(author) 
             @book.authors << author
           end  
@@ -179,6 +179,10 @@ class BooksController < ApplicationController
 
   def current_book
     current_user.books.all.find_by_slug(params[:slug])
+  end
+
+  def found_book
+    Book.find_by_slug(params[:slug])
   end
 
 end
