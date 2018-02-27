@@ -19,12 +19,12 @@ class Book < ActiveRecord::Base
     Book.all.detect {|book| book.slug == slug }
   end
 
-  def self.available?(book)
-    book.status == "available"
+  def available?
+    self.status == "available"
   end 
 
-  def self.borrowed?(book)
-    book.status == "borrowed"
+  def borrowed?
+    self.status == "borrowed"
   end
 
 end
