@@ -23,19 +23,6 @@ class BooksController < ApplicationController
     end       
   end
 
-  get '/bookshelf/:slug' do
-    if logged_in?
-      if @book = current_book     
-        erb :'/books/show_book'
-      else
-        flash[:message] = "Oops, that's not a book in your collection."
-        redirect '/bookshelf'
-      end
-    else
-      redirect '/login'
-    end 
-  end
-
   post '/bookshelf' do
     if !current_user.books.all.find_by(title: params[:book][:title])
       @book = Book.create(params[:book])
@@ -70,10 +57,23 @@ class BooksController < ApplicationController
     end
   end
 
+  get '/bookshelf/:slug' do
+    if logged_in?
+      if @book = current_book     
+        erb :'/books/show_book'
+      else
+        flash[:message] = "Oops, that's not a book in your collection."
+        redirect '/bookshelf'
+      end
+    else
+      redirect '/login'
+    end 
+  end
+
   get '/bookshelf/:slug/borrow' do
     if logged_in?
       @book = found_book
-      if @book.user != current_user && Book.available?(@book)
+      if @book.user != current_user && @book.available?
         erb :'/books/borrow_book'
       else
         flash[:message] = "Please choose a book that's available for borrowing."
@@ -100,7 +100,7 @@ class BooksController < ApplicationController
   get '/bookshelf/:slug/return' do
     if logged_in?
       @book = found_book
-      if @book.borrower == current_user.id && Book.borrowed?(@book)
+      if @book.borrower == current_user.id && @book.borrowed?
         erb :'/books/return_book'
       else
         flash[:message] = "You're only able to return books that you are currently borrowing."
