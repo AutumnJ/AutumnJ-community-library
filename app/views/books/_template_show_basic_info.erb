@@ -1,0 +1,16 @@
+    <p><strong>Title: </strong><%= book.title %></p>
+    <% if book.year_published.nil? %>
+      <p><strong>Year Published: </strong>N/A</p>
+    <% else %>
+      <p><strong>Year Published: </strong><%= book.year_published %></p>
+    <% end %>
+    <% if book.language.nil? || book.language == "" %>
+      <p><strong>Language: </strong>N/A</p>
+    <% else %>
+      <p><strong>Language: </strong><%= book.language %></p>
+    <% end %>
+    <% if book.description.nil? || book.description == "" %>
+      <p><strong>Description: </strong>N/A</p>
+    <% else %>
+      <p><strong>Description: </strong><%= book.description %></p>
+    <% end %>
