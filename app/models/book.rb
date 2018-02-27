@@ -12,7 +12,8 @@ class Book < ActiveRecord::Base
   has_many :genres, through: :book_genres
 
   def slug
-    title.downcase.gsub(/[^A-Za-z0-9\s]/i, " ").strip.gsub(" ","-")
+    title.downcase.gsub('?', "").gsub(" ","-")
+    #title.downcase.gsub(/[^A-Za-z0-9\s]/i, " ").strip.gsub(" ","-")
   end
 
   def self.find_by_slug(slug)
