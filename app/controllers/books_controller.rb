@@ -1,9 +1,4 @@
-require 'sinatra/base'
-require 'sinatra/flash'
-
 class BooksController < ApplicationController 
-
-  register Sinatra::Flash
 
   get '/bookshelf' do
     if logged_in?
@@ -59,7 +54,8 @@ class BooksController < ApplicationController
 
   get '/bookshelf/:slug' do
     if logged_in?
-      if @book = current_book     
+      @book = found_book
+      if current_book   
         erb :'/books/show_book'
       else
         flash[:message] = "Oops, that's not a book in your collection."
@@ -126,7 +122,8 @@ class BooksController < ApplicationController
 
   get '/bookshelf/:slug/edit' do
     if logged_in?
-      if @book = current_book
+      @book = found_book
+      if current_book
           erb :'/books/edit_book'
       else
         flash[:message] = "You're only able to edit books that are part of your collection."
@@ -139,24 +136,26 @@ class BooksController < ApplicationController
 
   patch '/bookshelf/:slug' do
     if logged_in?
-      @book = current_book
-      @book.update(params[:book])
-        if !params[:genre][:name].empty?
-          genre = Genre.find_or_create_by(name: params[:genre][:name].titleize)
-          if !@book.genres.include?(genre) 
-            @book.genres << genre
+      @book = found_book
+      if current_book
+        @book.update(params[:book])
+          if !params[:genre][:name].empty?
+            genre = Genre.find_or_create_by(name: params[:genre][:name].titleize)
+            if !@book.genres.include?(genre) 
+              @book.genres << genre
+            end
           end
-        end
-        if !params[:author][:name].empty?
-          author = Author.find_or_create_by(name: params[:author][:name].titleize)
-          if !@book.authors.include?(author) 
-            @book.authors << author
-          end  
-        end
-        @book.save
+          if !params[:author][:name].empty?
+            author = Author.find_or_create_by(name: params[:author][:name].titleize)
+            if !@book.authors.include?(author) 
+              @book.authors << author
+            end  
+          end
+          @book.save
 
-        flash[:message] = "Successfully updated book."
-        redirect to "/bookshelf/#{@book.slug}"
+          flash[:message] = "Successfully updated book."
+          redirect to "/bookshelf/#{@book.slug}"
+      end
     else
       redirect '/login'
     end
@@ -164,7 +163,8 @@ class BooksController < ApplicationController
 
   delete '/bookshelf/:slug/delete' do
     if logged_in?
-      if @book = current_book
+      @book = found_book
+      if current_book
         @book.delete
 
         flash[:message] = "The book was removed from your library."
@@ -173,16 +173,6 @@ class BooksController < ApplicationController
     else
       redirect '/login'
     end
-  end
-
-  private 
-
-  def current_book
-    current_user.books.all.find_by_slug(params[:slug])
-  end
-
-  def found_book
-    Book.find_by_slug(params[:slug])
   end
 
 end
