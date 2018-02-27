@@ -12,36 +12,7 @@
 
 <h1>Below is the info about the book you'd like to borrow from: <%= @book.user.name %></h1>
 
-    <p><strong>Title: </strong><%= @book.title %></p>
-    <% if @book.year_published.nil? %>
-      <p><strong>Year Published: </strong>N/A</p>
-    <% else %>
-      <p><strong>Year Published: </strong><%= @book.year_published %></p>
-    <% end %>
-    <% if @book.language.nil? || @book.language == "" %>
-      <p><strong>Language: </strong>N/A</p>
-    <% else %>
-      <p><strong>Language: </strong><%= @book.language %></p>
-    <% end %>
-    <% if @book.description.nil? || @book.description == "" %>
-      <p><strong>Description: </strong>N/A</p>
-    <% else %>
-      <p><strong>Description: </strong><%= @book.description %></p>
-    <% end %>
-    <% if @book.authors.nil? || @book.authors == [] %>
-      <p><strong>Author(s): </strong>N/A</p>
-    <% else %>
-      <p><strong>Author(s): </strong><% @book.authors.order(:name).all.each do |author| %>
-        <ul><%= author.name %></ul>
-      <% end %></p>
-    <% end %>
-    <% if @book.genres.nil? || @book.genres == [] %>
-      <p><strong>Genres(s): </strong>N/A</p>
-    <% else %>
-      <p><strong>Genre(s): </strong><% @book.genres.order(:name).all.each do |genre| %>
-         <ul><%= genre.name %></ul>
-      <% end %></p>
-    <% end %>
+  <%= erb :'/books/_template_show_edit', locals: {book: @book} %>
 
 <form method="POST" action="/bookshelf/<%=@book.slug%>/borrow">
   <input type="submit" name="status" value="Borrow Book">
