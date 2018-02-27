@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       @user.save
       redirect '/login'
       else 
-      flash[:message] = "Please enter your name, a valid email address, and a username and password for future logins."
+      flash[:message] = "Please enter your name, a valid email address, and a username and password, which you'll use for future logins."
       redirect '/signup'
     end
   end
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 
   get '/logout' do
     if logged_in?
-      session.destroy
+      session.clear
       erb :'users/logout'
     else
       redirect to '/'
