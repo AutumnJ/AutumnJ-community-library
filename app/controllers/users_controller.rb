@@ -1,9 +1,4 @@
-require 'sinatra/base'
-require 'sinatra/flash'
-
 class UsersController < ApplicationController  
-
-  register Sinatra::Flash
 
   get '/signup' do
     if !logged_in?
@@ -18,8 +13,9 @@ class UsersController < ApplicationController
     @user = User.new(name: params[:name], email: params[:email], username: params[:username], password: params[:password])
     if @user.valid?
       @user.save
-      redirect '/login'
-      else 
+      session[:user_id] = @user.id 
+      redirect '/bookshelf'
+    else 
       flash[:message] = "Please enter your name, a valid email address, and a username and password, which you'll use for future logins."
       redirect '/signup'
     end
@@ -37,7 +33,7 @@ class UsersController < ApplicationController
   post '/login' do
     @user = User.find_by(username: params[:username])
     if @user && @user.authenticate(params[:password]) #user is evaluating truthiness of line above
-      session[:user_id] = @user.id
+      session[:user_id] = @user.id #session scope variable
       redirect '/bookshelf'
     else
       redirect '/failure'
