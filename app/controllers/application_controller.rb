@@ -18,7 +18,7 @@ class ApplicationController < Sinatra::Base
   end
 
 
-  helpers do #convention is to store these methods in application controller 
+  helpers do
     def logged_in?
       !!session[:user_id]
     end
