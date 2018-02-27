@@ -25,9 +25,10 @@ class BooksController < ApplicationController
 
   get '/bookshelf/:slug' do
     if logged_in?
-      if @book = current_user.books.all.find_by_slug(params[:slug])     
+      if @book = current_book     
         erb :'/books/show_book'
       else
+        flash[:message] = "Oops, that's not a book in your collection."
         redirect '/bookshelf'
       end
     else
@@ -35,25 +36,28 @@ class BooksController < ApplicationController
     end 
   end
 
-  post '/bookshelf' do #add valid? 
+  post '/bookshelf' do
     if !current_user.books.all.find_by(title: params[:book][:title])
       @book = Book.create(params[:book])
         if !params[:genre][:name].empty?
-          genre = Genre.find_or_create_by(name: params[:genre][:name])
+          genre = Genre.find_or_create_by(name: params[:genre][:name].capitalize)
           if params[:genres].nil?
             params[:genres] = []
           end
-          params[:genres] << genre.id
+          if !params[:genres].include?(genre.id.to_s)
+            params[:genres] << genre.id
+          end
         end
         if !params[:author][:name].empty?
-          author = Author.find_or_create_by(name: params[:author][:name])
+          author = Author.find_or_create_by(name: params[:author][:name].capitalize)
           if params[:authors].nil?
             params[:authors] = []
           end
+          if !params[:authors].include?(author.id.to_s)
             params[:authors] << author.id
+          end
         end
-
-        @book.genre_ids = params[:genres] #make sure each genre is only added once?
+        @book.genre_ids = params[:genres]
         @book.author_ids = params[:authors]
         @book.user = current_user
         @book.save
@@ -69,9 +73,10 @@ class BooksController < ApplicationController
   get '/bookshelf/:slug/borrow' do
     if logged_in?
       @book = Book.find_by_slug(params[:slug])
-      if @book.user != current_user && @book.status == "available" #available?(@book) defined available?(book) where book.status == "available"
+      if @book.user != current_user && Book.available?(@book)
         erb :'/books/borrow_book'
       else
+        flash[:message] = "Please choose a book that's available for borrowing."
         redirect '/bookshelf'
       end 
     else
@@ -95,9 +100,10 @@ class BooksController < ApplicationController
   get '/bookshelf/:slug/return' do
     if logged_in?
       @book = Book.find_by_slug(params[:slug])
-      if @book.borrower == current_user.id && @book.status == "borrowed"
+      if @book.borrower == current_user.id && Book.borrowed?(@book)
         erb :'/books/return_book'
       else
+        flash[:message] = "You're only able to return books that you are currently borrowing."
         redirect '/bookshelf'
       end 
     else
@@ -120,9 +126,10 @@ class BooksController < ApplicationController
 
   get '/bookshelf/:slug/edit' do
     if logged_in?
-      if @book = current_user.books.all.find_by_slug(params[:slug])
+      if @book = current_book
           erb :'/books/edit_book'
       else
+        flash[:message] = "You're only able to edit books that are part of your collection."
         redirect '/bookshelf'
       end
     else
@@ -130,17 +137,21 @@ class BooksController < ApplicationController
     end
   end
 
-  patch '/bookshelf/:slug' do # add valid?
+  patch '/bookshelf/:slug' do
     if logged_in?
-      @book = current_user.books.all.find_by_slug(params[:slug])
+      @book = current_book
       @book.update(params[:book])
         if !params[:genre][:name].empty?
-          genre = Genre.find_or_create_by(name: params[:genre][:name])
-          @book.genres << genre
+          genre = Genre.find_or_create_by(name: params[:genre][:name].capitalize)
+          if !@book.genres.include?(genre) 
+            @book.genres << genre
+          end
         end
         if !params[:author][:name].empty?
-          author = Author.find_or_create_by(name: params[:author][:name])
-          @book.authors << author
+          author = Author.find_or_create_by(name: params[:author][:name].capitalize)
+          if !@book.authors.include?(author) 
+            @book.authors << author
+          end  
         end
         @book.save
 
@@ -153,7 +164,7 @@ class BooksController < ApplicationController
 
   delete '/bookshelf/:slug/delete' do
     if logged_in?
-      if @book = current_user.books.all.find_by_slug(params[:slug])
+      if @book = current_book
         @book.delete
 
         flash[:message] = "The book was removed from your library."
@@ -166,8 +177,8 @@ class BooksController < ApplicationController
 
   private 
 
-  # def current_book #add some logic to this and update 
-  #   current_user.books.all.find_by_slug(params[:slug])
-  # end
+  def current_book
+    current_user.books.all.find_by_slug(params[:slug])
+  end
 
 end
