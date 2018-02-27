@@ -1,0 +1,14 @@
+    <% if book.authors.nil? || book.authors == [] %>
+      <p><strong>Author(s): </strong>N/A</p>
+    <% else %>
+      <p><strong>Author(s): </strong><% book.authors.order(:name).all.each do |author| %>
+        <ul><%= author.name %></ul>
+      <% end %></p>
+    <% end %>
+    <% if book.genres.nil? || book.genres == [] %>
+      <p><strong>Genres(s): </strong>N/A</p>
+    <% else %>
+      <p><strong>Genre(s): </strong><% book.genres.order(:name).all.each do |genre| %>
+         <ul><%= genre.name %></ul>
+      <% end %></p>
+    <% end %>
