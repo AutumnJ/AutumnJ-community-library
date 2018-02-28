@@ -2,8 +2,6 @@ require 'cgi'
 
 class Book < ActiveRecord::Base
 
-  include ActiveModel::Validations
-
   validates :title, presence: true 
   #title is also required field when entering book
 
