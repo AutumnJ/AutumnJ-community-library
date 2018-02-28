@@ -16,7 +16,7 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id 
       redirect '/bookshelf'
     else 
-      flash[:message] = "Please enter your name, a valid email address, and a username and password, which you'll use for future logins."
+      flash[:message] = "Please enter your name, a valid email address, and unique username and password, which you'll use for future logins."
       redirect '/signup'
     end
   end
