@@ -1,3 +1,5 @@
+require 'cgi'
+
 class Book < ActiveRecord::Base
 
   include ActiveModel::Validations
@@ -12,12 +14,13 @@ class Book < ActiveRecord::Base
   has_many :genres, through: :book_genres
 
   def slug
-    title.downcase.gsub('?', "").gsub(" ","-")
+    CGI.escape(title.downcase)
+    #title.downcase.gsub('?', "").gsub(" ","-")
     #title.downcase.gsub(/[^A-Za-z0-9\s]/i, " ").strip.gsub(" ","-")
   end
 
   def self.find_by_slug(slug)
-    Book.all.detect {|book| book.slug == slug }
+    Book.all.detect {|book| CGI.unescape(book.slug)== CGI.unescape(slug) }
   end
 
   def available?
