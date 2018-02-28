@@ -10,14 +10,18 @@ class UsersController < ApplicationController
   end
 
   post "/signup" do
-    @user = User.new(name: params[:name], email: params[:email], username: params[:username], password: params[:password])
-    if @user.valid?
-      @user.save
-      session[:user_id] = @user.id 
-      redirect '/bookshelf'
-    else 
-      flash[:message] = "Please enter your name, a valid email address, and unique username and password, which you'll use for future logins."
+    if User.find_by(username: params[:username])
+      flash[:message] = "That username already exists, please choose another."
       redirect '/signup'
+    else @user = User.new(name: params[:name], email: params[:email], username: params[:username], password: params[:password])
+      if @user.valid?
+        @user.save
+        session[:user_id] = @user.id 
+        redirect '/bookshelf'
+      else 
+        flash[:message] = "Please enter your name, a valid email address, and username and password, which you'll use for future logins."
+        redirect '/signup'
+      end
     end
   end
 
